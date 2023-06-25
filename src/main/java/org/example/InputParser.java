@@ -153,7 +153,7 @@ class InputParser {
         if (ok == 0) {
             throw new MathActionException("Отсутствует математический знак");
         } else if (ok > 1) {
-            throw new MathActionException("Некорректно введен математический знак");
+            throw new MathActionException("формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *)");
         }
     }
 }
