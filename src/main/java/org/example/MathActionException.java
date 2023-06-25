@@ -1,6 +1,6 @@
-package org.example.exception;
+package org.example;
 
-public class MathActionException extends Exception{
+class MathActionException extends Exception{
 
     public MathActionException(String message) {
         super(message);

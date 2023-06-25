@@ -1,6 +1,6 @@
-package org.example.enums;
+package org.example;
 
-public enum ActionMath {
+enum ActionMath {
 
     PLUS('+'),
     MINUS('-'),

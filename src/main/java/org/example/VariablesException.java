@@ -1,4 +1,4 @@
-package org.example.exception;
+package org.example;
 
 public class VariablesException extends Exception {
 

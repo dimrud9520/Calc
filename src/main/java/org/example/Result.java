@@ -1,108 +1,85 @@
 package org.example;
 
-import org.example.enums.Number;
+class Result {
 
-public final class Result {
+    private final InputParser action;
+    private int arabicResult;
+    private String romanResult;
 
-    private final UserAction action;
-    private int arabResult;
-    private String rimResult;
-
-    public Result(UserAction action) {
+    public Result(InputParser action) {
         this.action = action;
+    }
 
-        if (action.isRimAction()) {
-            getResult();
+    public String getResultCalculation() throws CalculationException {
+        calculation(action.getValue1().getArabic(), action.getValue2().getArabic());
 
-            if (arabResult < 0) {
-
-                System.out.println(minusRimResult());
-            } else if (arabResult == 0) {
-
-                System.out.println(arabResult);
-            } else {
-
-                System.out.println(transformRim());
-            }
-
+        if (InputType.ARABIC.equals(action.getInputTypeValue())) {
+            return String.valueOf(arabicResult);
         } else {
 
-            getResult();
-            System.out.println(arabResult);
+            if (arabicResult <= 0) {
+                throw new CalculationException("В римской системе нет отрицательных чисел");
+            }
+
+            transformArabicToRoman();
+            return romanResult;
         }
     }
 
-    /**
-     * Метод преобразования ответа в рискую цифру
-     *
-     * @return строку с римской цифрой
-     */
-    private String transformRim() {
-        int input = arabResult;
+    private void transformArabicToRoman() {
+        romanResult = "";
 
-        while (input >= 90) {
-            rimResult += "XC";
-            input -= 90;
+        while (arabicResult >= 90) {
+            romanResult += "XC";
+            arabicResult -= 90;
         }
-        while (input >= 50) {
-            rimResult += "L";
-            input -= 50;
+        while (arabicResult >= 50) {
+            romanResult += "L";
+            arabicResult -= 50;
         }
-        while (input >= 40) {
-            rimResult += "XL";
-            input -= 40;
+        while (arabicResult >= 40) {
+            romanResult += "XL";
+            arabicResult -= 40;
         }
-        while (input >= 10) {
-            rimResult += "X";
-            input -= 10;
+        while (arabicResult >= 10) {
+            romanResult += "X";
+            arabicResult -= 10;
         }
-        while (input >= 9) {
-            rimResult += "IX";
-            input -= 9;
+        while (arabicResult >= 9) {
+            romanResult += "IX";
+            arabicResult -= 9;
         }
-        while (input >= 5) {
-            rimResult += "V";
-            input -= 5;
+        while (arabicResult >= 5) {
+            romanResult += "V";
+            arabicResult -= 5;
         }
-        while (input >= 4) {
-            rimResult += "IV";
-            input -= 4;
+        while (arabicResult >= 4) {
+            romanResult += "IV";
+            arabicResult -= 4;
         }
-        while (input >= 1) {
-            rimResult += "I";
-            input -= 1;
+        while (arabicResult >= 1) {
+            romanResult += "I";
+            arabicResult -= 1;
         }
-        return rimResult;
     }
 
     /**
      * Метод действия над двумя переменными
      */
-    private void getResult() {
-        if (action.getZnak() == '+') {
-            arabResult = action.getValue1() + action.getValue2();
-        }
-        if (action.getZnak() == '-') {
-            arabResult = action.getValue1() - action.getValue2();
-        }
-        if (action.getZnak() == '*') {
-            arabResult = action.getValue1() * action.getValue2();
-        }
-        if (action.getZnak() == '/') {
-            arabResult = action.getValue1() / action.getValue2();
-        }
-    }
+    private void calculation(int value1, int value2) {
+        ActionMath actionMath = action.getMathAction();
 
-    /**
-     * Метод получения отрицательного значения римских цифр
-     */
-    private String minusRimResult() {
-        for (Number count : Number.values()) {
-            if (arabResult == count.getMinusArab()) {
-                rimResult = "-" + count.name();
-            }
+        if (ActionMath.PLUS.equals(actionMath)) {
+            arabicResult = value1 + value2;
         }
-
-        return rimResult;
+        if (ActionMath.MINUS.equals(actionMath)) {
+            arabicResult = value1 - value2;
+        }
+        if (ActionMath.MULTI.equals(actionMath)) {
+            arabicResult = value1 * value2;
+        }
+        if (ActionMath.DEV.equals(actionMath)) {
+            arabicResult = value1 / value2;
+        }
     }
 }
